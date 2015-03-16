@@ -16,18 +16,17 @@ public class SearchTest {
 	@Test
 	public void testFilteredByName() {
 		concerts = s1.getApisData();
-		concerts = s1.getFilteredData("Amabadama", null, null, null);
+		concerts = s1.getFilteredData("Amabadama", "", "", "");
 		assertEquals(concerts.get(0).getName(), "Amabadama");
 		assertEquals(concerts.get(0).getTime(), "20:00");
 		assertEquals(concerts.get(0).getPrice(), "4000");
-		assertEquals(concerts.get(0).getDate(), "24-03-2015");
-		
+		assertEquals(concerts.get(0).getDate(), "24-03-2015");	
 	}
 	
 	@Test
 	public void testFilteredByTime() {
 		concerts = s1.getApisData();
-		concerts = s1.getFilteredData("", "20:00", null, null);
+		concerts = s1.getFilteredData("", "20:00", "", "");
 		assertEquals(concerts.get(0).getName(), "Amabadama");
 		assertEquals(concerts.get(0).getTime(), "20:00");
 		assertEquals(concerts.get(0).getPrice(), "4000");
