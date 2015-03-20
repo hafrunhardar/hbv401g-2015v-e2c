@@ -13,25 +13,17 @@ public class Search {
 		ArrayList<Concert> list = new ArrayList<Concert>();
 		for(int i = 0; i < data.size(); i++ ){
 			Concert temp = data.get(i);
-			if(inputType == "name"){
-				if( inputData == temp.getName()){
-					list.add(temp);
-				}
+			if(inputType == "name" && inputData == temp.getName()){
+				list.add(temp);
 			}
-			if(inputType == "time"){
-				if(inputData == temp.getTime()){
-					list.add(temp);
-				}
+			if(inputType == "time" && inputData == temp.getTime()){
+				list.add(temp);
 			}
-			if(inputType == "price"){
-				if(inputData == temp.getPrice()){
-					list.add(temp);
-				}
+			if(inputType == "price" && inputData == temp.getPrice()){
+				list.add(temp);
 			}
-			if(inputType == "date"){
-				if(inputData == temp.getDate()){
-					list.add(temp);
-				}
+			if(inputType == "date" && inputData == temp.getDate()){
+				list.add(temp);
 			}
 		}
 		return list;
