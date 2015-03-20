@@ -30,7 +30,7 @@ public class Search {
 	}
 	
 	public ArrayList<Concert> getFilteredData(String name, String time, String price, String date){
-		apisData = ApisMock.getData();
+		apisData = getApisData();
 			
 		if(name != "") {
 			for(int i = 0; i < apisData.size(); i++){
