@@ -45,6 +45,7 @@ public class Search {
 				Concert temp = apisData.get(i);
 				if(name == temp.getName()){
 					tempList = filter(apisData, "name", temp.getName());
+					break;
 				}
 			}
 		}
@@ -54,6 +55,7 @@ public class Search {
 					Concert temp = apisData.get(i);
 					if(time == temp.getTime()){
 						tempList = filter(apisData, "time", temp.getTime());
+						break;
 					}
 				}
 			}else{
@@ -61,6 +63,7 @@ public class Search {
 					Concert temp = tempList.get(i);
 					if(time == temp.getTime()){
 						tempList = filter(tempList, "time", temp.getTime());
+						break;
 					}
 				}
 			}
@@ -72,6 +75,7 @@ public class Search {
 					Concert temp = apisData.get(i);
 					if(price == temp.getPrice()){
 						tempList = filter(apisData, "price", temp.getPrice());
+						break;
 					}
 				}
 			}else{
@@ -90,6 +94,7 @@ public class Search {
 					Concert temp = apisData.get(i);
 					if(date == temp.getDate()){
 						tempList = filter(apisData, "date", temp.getDate());
+						break;
 					}
 				}
 			}else{
@@ -97,11 +102,15 @@ public class Search {
 					Concert temp = tempList.get(i);
 					if(date == temp.getDate()){
 						tempList = filter(tempList, "date", temp.getDate());
+						break;
 					}
 				}
 			}
 		}
-		
-		return tempList;
+		if(tempList.size()==0){ 
+			return apisData;
+		}else{
+			return tempList;
+		}
 	}
 }
