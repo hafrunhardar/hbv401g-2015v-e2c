@@ -35,20 +35,19 @@ public class Search {
 		for (int i=0; i<results.length(); i++) {
 		    JSONObject item = results.getJSONObject(i);
 		    String name = item.getString("eventDateName");
-		    String date = item.getString("dateOfShow");
+		    String timeDate = item.getString("dateOfShow");
 		    String loc = item.getString("eventHallName");
 		    
+		    String[] splitTimeDate = timeDate.split("T");
 		    Concert concert = new Concert();
 		    
 		    concert.setName(name);
-		    concert.setDate(date);
+		    concert.setDate(splitTimeDate[0]);
+		    concert.setTime(splitTimeDate[1]);
 		    concert.setLoc(loc);
 		    
 		    apisData.add(concert);
 		}
-		
-		
-		//System.out.println(obj);
 		
 		return apisData;
 	}
@@ -166,17 +165,13 @@ public class Search {
 				}
 			}
 		}
-		if(tempList.size()==0){ 
-			return apisData;
-		}else{
-			return tempList;
-		}
+		return tempList;
 	}
 	
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = search.getFilteredData("Skálmöld.","","","");
+		ArrayList<Concert> filter = search.getFilteredData("","21:00:00","","");
 		
 		for(int i = 0; i < filter.size(); i++){
 			System.out.println(filter.get(i).getName());
