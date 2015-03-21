@@ -74,21 +74,20 @@ public class Search {
 	    }
 	  }
 	
-	
 	private ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){
 		ArrayList<Concert> list = new ArrayList<Concert>();
 		for(int i = 0; i < data.size(); i++ ){
 			Concert temp = data.get(i);
-			if(inputType == "name" && inputData == temp.getName()){
+			if(inputType == "name" && temp.getName().contains(inputData)){
 				list.add(temp);
 			}
-			if(inputType == "time" && inputData == temp.getTime()){
+			if(inputType == "time" && temp.getTime().contains(inputData)){
 				list.add(temp);
 			}
-			if(inputType == "loc" && inputData == temp.getLoc()){
+			if(inputType == "loc" && temp.getLoc().contains(inputData)){
 				list.add(temp);
 			}
-			if(inputType == "date" && inputData == temp.getDate()){
+			if(inputType == "date" && temp.getDate().contains(inputData)){
 				list.add(temp);
 			}
 		}
@@ -101,7 +100,7 @@ public class Search {
 		if(name != "") {
 			for(int i = 0; i < apisData.size(); i++){
 				Concert temp = apisData.get(i);
-				if(name.equals(temp.getName())){
+				if(temp.getName().contains(name)){
 					tempList = filter(apisData, "name", temp.getName());
 					break;
 				}
@@ -111,7 +110,7 @@ public class Search {
 			if(tempList.size() == 0){
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
-					if(time.equals(temp.getTime())){
+					if(temp.getTime().contains(time)){
 						tempList = filter(apisData, "time", temp.getTime());
 						break;
 					}
@@ -119,7 +118,7 @@ public class Search {
 			}else{
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
-					if(time.equals(temp.getTime())){
+					if(temp.getTime().contains(time)){
 						tempList = filter(tempList, "time", temp.getTime());
 						break;
 					}
@@ -131,7 +130,7 @@ public class Search {
 			if(tempList.size() == 0){
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
-					if(loc.equals(temp.getLoc())){
+					if(temp.getLoc().contains(loc)){
 						tempList = filter(apisData, "loc", temp.getLoc());
 						break;
 					}
@@ -139,7 +138,7 @@ public class Search {
 			}else{
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
-					if(loc.equals(temp.getLoc())){
+					if(temp.getLoc().contains(loc)){
 						tempList = filter(tempList, "loc", temp.getLoc());
 					}
 				}
@@ -150,7 +149,7 @@ public class Search {
 			if(tempList.size() == 0){
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
-					if(date.equals(temp.getDate())){
+					if(temp.getDate().contains(date)){
 						tempList = filter(apisData, "date", temp.getDate());
 						break;
 					}
@@ -158,7 +157,7 @@ public class Search {
 			}else{
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
-					if(date.equals(temp.getDate())){
+					if(temp.getDate().contains(date)){
 						tempList = filter(tempList, "date", temp.getDate());
 						break;
 					}
@@ -171,7 +170,7 @@ public class Search {
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = search.getFilteredData("","21:00:00","","");
+		ArrayList<Concert> filter = search.getFilteredData("","20:00:00","","");
 		
 		for(int i = 0; i < filter.size(); i++){
 			System.out.println(filter.get(i).getName());
