@@ -1,13 +1,73 @@
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Search {
-	private ArrayList<Concert> apisData = new ArrayList<Concert>();
+	private  ArrayList<Concert> apisData = new ArrayList<Concert>();
 	private ArrayList<Concert> tempList = new ArrayList<Concert>();
+	private JSONObject obj;
 	
-	public ArrayList<Concert> getApisData(){
+
+	public ArrayList<Concert> getApisData() throws JSONException{
+		//Lesa inn json hlut frá apis.is
+		try {
+			obj = readJsonFromUrl("http://apis.is/concerts");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/*Búið að lesa inn json hlutinn*/
+		
+		JSONArray results = obj.getJSONArray("results");
+		
+		for (int i=0; i<results.length(); i++) {
+		    JSONObject item = results.getJSONObject(i);
+		    String name = item.getString("eventDateName");
+		    String date = item.getString("dateOfShow");
+		    String loc = item.getString("eventHallName");
+		}
+		
+		
+		System.out.println(obj);
 		apisData = ApisMock.getData();
 		return apisData;
 	}
+	
+	private String readAll(Reader rd) throws IOException {
+	    StringBuilder sb = new StringBuilder();
+	    int cp;
+	    while ((cp = rd.read()) != -1) {
+	      sb.append((char) cp);
+	    }
+	    return sb.toString();
+	  }
+
+	  private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+	    InputStream is = new URL(url).openStream();
+	    try {
+	      InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
+	      BufferedReader rd = new BufferedReader(in);
+	      String jsonText = readAll(rd);
+	      JSONObject json = new JSONObject(jsonText);
+	      return json;
+	    } finally {
+	      is.close();
+	    }
+	  }
+	
 	
 	private ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){
 		ArrayList<Concert> list = new ArrayList<Concert>();
@@ -19,7 +79,7 @@ public class Search {
 			if(inputType == "time" && inputData == temp.getTime()){
 				list.add(temp);
 			}
-			if(inputType == "price" && inputData == temp.getPrice()){
+			if(inputType == "loc" && inputData == temp.getLoc()){
 				list.add(temp);
 			}
 			if(inputType == "date" && inputData == temp.getDate()){
@@ -29,7 +89,7 @@ public class Search {
 		return list;
 	}
 	
-	public ArrayList<Concert> getFilteredData(String name, String time, String price, String date){
+	public ArrayList<Concert> getFilteredData(String name, String time, String loc, String date) throws JSONException{
 		apisData = getApisData();
 			
 		if(name != "") {
@@ -61,20 +121,20 @@ public class Search {
 			}
 		}
 			
-		if(price != "") {
+		if(loc != "") {
 			if(tempList.size() == 0){
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
-					if(price == temp.getPrice()){
-						tempList = filter(apisData, "price", temp.getPrice());
+					if(loc == temp.getLoc()){
+						tempList = filter(apisData, "loc", temp.getLoc());
 						break;
 					}
 				}
 			}else{
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
-					if(price == temp.getPrice()){
-						tempList = filter(tempList, "price", temp.getPrice());
+					if(loc == temp.getLoc()){
+						tempList = filter(tempList, "loc", temp.getLoc());
 					}
 				}
 			}
@@ -104,5 +164,14 @@ public class Search {
 		}else{
 			return tempList;
 		}
+	}
+	
+	public static void main(String[]args) throws JSONException{
+		Search search = new Search();
+		System.out.println(search.getApisData());
+		
+		/*ArrayList<Concert> filter = search.getFilteredData("Amabadama","","","");
+		System.out.println(filter);*/
+		
 	}
 }

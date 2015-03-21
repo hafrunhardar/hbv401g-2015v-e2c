@@ -1,6 +1,6 @@
 
 public class Concert {
-	private String name, time, price, date;
+	private String name, time, loc, date;
 	private int seats;
 
 	public Concert() {
@@ -15,8 +15,8 @@ public class Concert {
 		return time;
 	}
 	
-	public String getPrice(){
-		return price;
+	public String getLoc(){
+		return loc;
 	}
 	
 	public String getDate(){
@@ -35,8 +35,8 @@ public class Concert {
 		this.time = time;
 	}
 	
-	public void setPrice(String price){
-		this.price = price;
+	public void setLoc(String loc){
+		this.loc = loc;
 	}
 	
 	public void setDate(String date){
