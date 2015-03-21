@@ -45,6 +45,7 @@ public class Search {
 		    concert.setDate(splitTimeDate[0]);
 		    concert.setTime(splitTimeDate[1]);
 		    concert.setLoc(loc);
+		    concert.setAvailableSeats(100);
 		    
 		    apisData.add(concert);
 		}
@@ -170,10 +171,10 @@ public class Search {
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = search.getFilteredData("","20:00:00","","");
+		ArrayList<Concert> filter = search.getFilteredData("","","","");
 		
 		for(int i = 0; i < filter.size(); i++){
-			System.out.println(filter.get(i).getName());
+			System.out.println(filter.get(i).getTime());
 		}
 	}
 }
