@@ -36,7 +36,8 @@ public class Search {
 		    JSONObject item = results.getJSONObject(i);
 		    String name = item.getString("eventDateName");
 		    String timeDate = item.getString("dateOfShow");
-		    String loc = item.getString("eventHallName");
+		    String loc2 = item.getString("eventHallName");
+		    String loc1 = item.getString("userGroupName");
 		    
 		    String[] splitTimeDate = timeDate.split("T");
 		    Concert concert = new Concert();
@@ -44,7 +45,7 @@ public class Search {
 		    concert.setName(name);
 		    concert.setDate(splitTimeDate[0]);
 		    concert.setTime(splitTimeDate[1]);
-		    concert.setLoc(loc);
+		    concert.setLoc(loc1+", "+loc2);
 		    concert.setAvailableSeats(100);
 		    
 		    apisData.add(concert);
@@ -102,7 +103,7 @@ public class Search {
 			for(int i = 0; i < apisData.size(); i++){
 				Concert temp = apisData.get(i);
 				if(temp.getName().contains(name)){
-					tempList = filter(apisData, "name", temp.getName());
+					tempList = filter(apisData, "name", name);
 					break;
 				}
 			}
@@ -112,7 +113,7 @@ public class Search {
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
 					if(temp.getTime().contains(time)){
-						tempList = filter(apisData, "time", temp.getTime());
+						tempList = filter(apisData, "time", time);
 						break;
 					}
 				}
@@ -120,7 +121,7 @@ public class Search {
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
 					if(temp.getTime().contains(time)){
-						tempList = filter(tempList, "time", temp.getTime());
+						tempList = filter(tempList, "time", time);
 						break;
 					}
 				}
@@ -132,7 +133,7 @@ public class Search {
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
 					if(temp.getLoc().contains(loc)){
-						tempList = filter(apisData, "loc", temp.getLoc());
+						tempList = filter(apisData, "loc", loc);
 						break;
 					}
 				}
@@ -140,7 +141,7 @@ public class Search {
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
 					if(temp.getLoc().contains(loc)){
-						tempList = filter(tempList, "loc", temp.getLoc());
+						tempList = filter(tempList, "loc", loc);
 					}
 				}
 			}
@@ -151,7 +152,7 @@ public class Search {
 				for(int i = 0; i < apisData.size(); i++){
 					Concert temp = apisData.get(i);
 					if(temp.getDate().contains(date)){
-						tempList = filter(apisData, "date", temp.getDate());
+						tempList = filter(apisData, "date", date);
 						break;
 					}
 				}
@@ -159,7 +160,7 @@ public class Search {
 				for(int i = 0; i < tempList.size(); i++){
 					Concert temp = tempList.get(i);
 					if(temp.getDate().contains(date)){
-						tempList = filter(tempList, "date", temp.getDate());
+						tempList = filter(tempList, "date", date);
 						break;
 					}
 				}
@@ -171,10 +172,10 @@ public class Search {
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = search.getFilteredData("","","","");
+		ArrayList<Concert> filter = search.getFilteredData("Eddie","20","Harpa","");
 		
 		for(int i = 0; i < filter.size(); i++){
-			System.out.println(filter.get(i).getTime());
+			System.out.println(filter.get(i).getLoc());
 		}
 	}
 }
