@@ -13,12 +13,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Search {
-	private  ArrayList<Concert> apisData = new ArrayList<Concert>();
-	private ArrayList<Concert> tempList = new ArrayList<Concert>();
-	private JSONObject obj;
+	private  static ArrayList<Concert> apisData = new ArrayList<Concert>();
+	private static JSONObject obj;
 	
 
-	public ArrayList<Concert> getApisData() throws JSONException{
+	public static ArrayList<Concert> getApisData() throws JSONException{
 		//Lesa inn json hlut frá apis.is
 		try {
 			obj = readJsonFromUrl("http://apis.is/concerts");
@@ -54,7 +53,7 @@ public class Search {
 		return apisData;
 	}
 	
-	private String readAll(Reader rd) throws IOException {
+	private static String readAll(Reader rd) throws IOException {
 	    StringBuilder sb = new StringBuilder();
 	    int cp;
 	    while ((cp = rd.read()) != -1) {
@@ -63,7 +62,7 @@ public class Search {
 	    return sb.toString();
 	  }
 
-	  private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+	  private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
 	    InputStream is = new URL(url).openStream();
 	    try {
 	      InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
@@ -76,7 +75,7 @@ public class Search {
 	    }
 	  }
 	
-	private ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){
+	private static ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){
 		ArrayList<Concert> list = new ArrayList<Concert>();
 		for(int i = 0; i < data.size(); i++ ){
 			Concert temp = data.get(i);
@@ -96,9 +95,9 @@ public class Search {
 		return list;
 	}
 	
-	public ArrayList<Concert> getFilteredData(String name, String time, String loc, String date) throws JSONException{
+	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date) throws JSONException{
 		apisData = getApisData();
-			
+		ArrayList<Concert> tempList = new ArrayList<Concert>();
 		if(name != "") {
 			for(int i = 0; i < apisData.size(); i++){
 				Concert temp = apisData.get(i);
@@ -172,7 +171,7 @@ public class Search {
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = search.getFilteredData("Eddie","20","Harpa","");
+		ArrayList<Concert> filter = getFilteredData("Eddie","20","Harpa","");
 		
 		for(int i = 0; i < filter.size(); i++){
 			System.out.println(filter.get(i).getLoc());
