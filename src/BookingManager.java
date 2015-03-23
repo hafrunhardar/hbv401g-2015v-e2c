@@ -15,18 +15,34 @@ public class BookingManager {
 		stmt.executeUpdate("CREATE TABLE Concerts(name varchar(30), time varchar(8), loc varchar(10), date varchar(10) seats int );");
 		
 		conn.close();
-		
 	}
 	
 	private static void addConcert(String name, String time, String loc, String date, int seats) throws SQLException{
 		stmt.executeUpdate("INSERT INTO table_name VALUES ("+name+","+time+","+loc+","+date+","+seats+");");
 	}
 	
+	public static boolean checkIfConcertExists(){
+		if (stmt.execute("SELECT")!= null) return true;
+		return false;
+	}
+	
+	public static boolean checkSeats(){
+		if (stmt.execute("SELECT") > 0) return true;
+		return false;
+	}
+
+	public static ArrayList <> bookConcert(){
+		checkIfConcertExists();
+		checkSeats();
+
+	}
+	
+	
+	
 	/*public static Concert getConcertFromDatabase(){
 		Concert concert;
 		stmt.execute("SELECT");
 		return concert;
 	}*/
-	
 	
 }
