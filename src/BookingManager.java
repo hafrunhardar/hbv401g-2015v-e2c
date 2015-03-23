@@ -38,7 +38,6 @@ public class BookingManager {
 	}
 	
 	
-	
 	/*public static Concert getConcertFromDatabase(){
 		Concert concert;
 		stmt.execute("SELECT");
