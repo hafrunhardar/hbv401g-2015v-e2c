@@ -1,8 +1,8 @@
 import java.sql.*;
 
 public class BookingManager {
-	private static Statment stmt;
-	private static Connection conn; 
+	private Statement stmt;
+	private Connection conn; 
 	
 	public BookingManager() {
 		try {
@@ -22,21 +22,18 @@ public class BookingManager {
 
 		stmt.executeUpdate("CREATE DATABASE Booking");
 		stmt.executeUpdate("CREATE TABLE Concerts(name varchar(30), time varchar(8), loc varchar(10), date varchar(10) seats int );");
-		
-		conn.close();
 	}
 	
 	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
 		stmt = conn.createStatement(); 
 		stmt.executeUpdate("INSERT INTO Concerts VALUES ("+inputName+","+inputTime+","+inputLoc+","+inputDate+",100);");		
-		conn.close();
 	}
 	
-	private boolean checkIfConcertExists(String inputName, String inputTime){
+	private boolean checkIfConcertExists(String inputName, String inputTime, String inputDate) throws SQLException{
 		stmt = conn.createStatement(); 
-		if (!stmt.execute("SELECT name, time FROM Concerts WHERE name="+inputName+" AND time="+inputTime+"")) return true;
+		ResultSet rs = stmt.executeQuery("SELECT name, time, date FROM Concerts WHERE name="+inputName+" AND time="+inputTime+" AND date="+inputDate+"");
+		if (rs.getRow() != 0) return true;
 		return false;
-		conn.close();	
 	}
 	
 	/*
@@ -47,24 +44,22 @@ public class BookingManager {
 	    }
 	*/
 
-	private int checkSeats(){
+	private int checkSeats() throws SQLException{
 		stmt = conn.createStatement(); 
-		ResultSet rs = stmt.execute("SELECT seats AS count FROM Concerts");
-		int numberOfSeats = rs.getInt("count");
+		ResultSet rs = stmt.executeQuery("SELECT seats AS count FROM Concerts");
+		int numberOfSeats = rs.getInt("seats");
 		return numberOfSeats;
-		conn.close();
 	}
 
-	public String bookConcert(String inputName, String inputTime, String inputLoc, String inputDate){
-		if (!checkIfConcertExists(inputName, inputTime)) {
+	public String bookConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
+		if (!checkIfConcertExists(inputName, inputTime, inputDate)) {
 			addConcert(inputName, inputTime, inputLoc, inputDate);
 		}
 		if (checkSeats() > 0) {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
 			stmt = conn.createStatement(); 
-			stmt.executeUpdate("UPDATE Concerts SET (seats = "+seats+") WHERE name="+inputName+" AND time="+inputTime+";");
-			conn.close();
+			stmt.executeUpdate("UPDATE Concerts SET (seats = "+numberOfSeats+") WHERE name="+inputName+" AND time="+inputTime+";");
 			return "Purchase confirmed :)";
 		}
 		return "No seats available :(";
