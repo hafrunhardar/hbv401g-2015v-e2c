@@ -22,7 +22,7 @@ public class BookingManager {
 	}
 	
 	private static boolean checkIfConcertExists(String inputName, String inputTime){
-		if (stmt.execute("SELECT name, time FROM Concerts WHERE name="+inputName+" AND time="+inputTime+"")!= null) return true;
+		if (!stmt.execute("SELECT name, time FROM Concerts WHERE name="+inputName+" AND time="+inputTime+"")) return true;
 		return false;
 	}
 	
@@ -47,9 +47,9 @@ public class BookingManager {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
 			stmt.executeUpdate("UPDATE Concerts SET (seats = "+seats+") WHERE name="+inputName+" AND time="+inputTime+";");
-			return "Confirmed purchase";
+			return "Confirmed purchase :)";
 		}
-		return "No seats available";
+		return "No seats available :(";
 	}
 	
 	
