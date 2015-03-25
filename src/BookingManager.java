@@ -8,6 +8,7 @@ public class BookingManager {
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=rootpassword");
 			stmt = null;
+			createDatabase();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,14 +37,6 @@ public class BookingManager {
 		return false;
 	}
 	
-	/*
-	Statement stmt3 = con.createStatement();
-	ResultSet rs3 = stmt3.executeQuery("SELECT COUNT(*) FROM "+lastTempTable+") AS count");
-	    while(rs3.next()){
-	    count = rs3.getInt("count");
-	    }
-	*/
-
 	private int checkSeats() throws SQLException{
 		stmt = conn.createStatement(); 
 		ResultSet rs = stmt.executeQuery("SELECT seats AS count FROM Concerts");
