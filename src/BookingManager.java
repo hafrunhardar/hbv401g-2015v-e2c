@@ -1,12 +1,21 @@
 import java.sql.*;
 
 public class BookingManager {
-	private static Connection conn = null;
-	private static Statement stmt = null;
+	private static Statment stmt;
+	private static Connection conn; 
 	
-	private static void createDatabase() throws SQLException{
+	public BookingManager() {
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=rootpassword");
+			stmt = null;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void createDatabase() throws SQLException{
 		System.out.println("Connecting to database...");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=rootpassword"); 
 
 		System.out.println("Creating database...");
 		stmt = conn.createStatement(); 
@@ -17,13 +26,17 @@ public class BookingManager {
 		conn.close();
 	}
 	
-	private static void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
+	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
+		stmt = conn.createStatement(); 
 		stmt.executeUpdate("INSERT INTO Concerts VALUES ("+inputName+","+inputTime+","+inputLoc+","+inputDate+",100);");		
+		conn.close();
 	}
 	
-	private static boolean checkIfConcertExists(String inputName, String inputTime){
+	private boolean checkIfConcertExists(String inputName, String inputTime){
+		stmt = conn.createStatement(); 
 		if (!stmt.execute("SELECT name, time FROM Concerts WHERE name="+inputName+" AND time="+inputTime+"")) return true;
 		return false;
+		conn.close();	
 	}
 	
 	/*
@@ -33,26 +46,30 @@ public class BookingManager {
 	    count = rs3.getInt("count");
 	    }
 	*/
-	private static int checkSeats(){
+
+	private int checkSeats(){
+		stmt = conn.createStatement(); 
 		ResultSet rs = stmt.execute("SELECT seats AS count FROM Concerts");
 		int numberOfSeats = rs.getInt("count");
 		return numberOfSeats;
+		conn.close();
 	}
 
-	public static String bookConcert(String inputName, String inputTime, String inputLoc, String inputDate){
+	public String bookConcert(String inputName, String inputTime, String inputLoc, String inputDate){
 		if (!checkIfConcertExists(inputName, inputTime)) {
 			addConcert(inputName, inputTime, inputLoc, inputDate);
 		}
 		if (checkSeats() > 0) {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
+			stmt = conn.createStatement(); 
 			stmt.executeUpdate("UPDATE Concerts SET (seats = "+seats+") WHERE name="+inputName+" AND time="+inputTime+";");
+			conn.close();
 			return "Purchase confirmed :)";
 		}
 		return "No seats available :(";
 	}
-	
-	
+		
 	/*public static Concert getConcertFromDatabase(){
 		Concert concert;
 		stmt.execute("SELECT");
