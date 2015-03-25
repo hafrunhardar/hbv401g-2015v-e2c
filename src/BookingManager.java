@@ -4,6 +4,7 @@ public class BookingManager {
 	private Statement stmt;
 	private Connection conn; 
 	
+	// BookingManager creates the database - may only be called once!
 	public BookingManager() {
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=rootpassword");
@@ -16,13 +17,9 @@ public class BookingManager {
 	}
 	
 	private void createDatabase() throws SQLException{
-		System.out.println("Connecting to database...");
-
-		System.out.println("Creating database...");
 		stmt = conn.createStatement(); 
-
 		stmt.executeUpdate("CREATE DATABASE Booking");
-		stmt.executeUpdate("CREATE TABLE Concerts(name varchar(30), time varchar(8), loc varchar(10), date varchar(10) seats int );");
+		stmt.executeUpdate("CREATE TABLE Concerts(name varchar(30), time varchar(8), loc varchar(50), date varchar(10) seats int );");
 	}
 	
 	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
@@ -56,12 +53,5 @@ public class BookingManager {
 			return "Purchase confirmed :)";
 		}
 		return "No seats available :(";
-	}
-		
-	/*public static Concert getConcertFromDatabase(){
-		Concert concert;
-		stmt.execute("SELECT");
-		return concert;
-	}*/
-	
+	}	
 }

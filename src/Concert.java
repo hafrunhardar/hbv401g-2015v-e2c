@@ -2,11 +2,8 @@
 public class Concert {
 	private String name, time, loc, date;
 	private int seats;
-
-	public Concert() {
-
-	}
 	
+// Getters
 	public String getName(){
 		return name;
 	}
@@ -26,7 +23,9 @@ public class Concert {
 	public int getAvailableSeats(){
 		return seats;
 	}
+
 	
+// Setters
 	public void setName(String name){
 		this.name = name;
 	}
@@ -41,9 +40,5 @@ public class Concert {
 	
 	public void setDate(String date){
 		this.date = date;
-	}
-	
-	public void setAvailableSeats(int seats){
-		this.seats = seats;
 	}
 }

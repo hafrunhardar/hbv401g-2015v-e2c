@@ -45,7 +45,6 @@ public class Search {
 		    concert.setDate(splitTimeDate[0]);
 		    concert.setTime(splitTimeDate[1]);
 		    concert.setLoc(loc1+", "+loc2);
-		    concert.setAvailableSeats(100);
 		    
 		    apisData.add(concert);
 		}
