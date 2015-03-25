@@ -47,7 +47,7 @@ public class BookingManager {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
 			stmt.executeUpdate("UPDATE Concerts SET (seats = "+seats+") WHERE name="+inputName+" AND time="+inputTime+";");
-			return "Confirmed purchase :)";
+			return "Purchase confirmed :)";
 		}
 		return "No seats available :(";
 	}

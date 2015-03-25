@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Search {
-	private  static ArrayList<Concert> apisData = new ArrayList<Concert>();
+	private static ArrayList<Concert> apisData = new ArrayList<Concert>();
 	private static JSONObject obj;
 	
 
@@ -167,7 +167,7 @@ public class Search {
 		}
 		return tempList;
 	}
-	
+	/*
 	public static void main(String[]args) throws JSONException{
 		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
@@ -177,4 +177,5 @@ public class Search {
 			System.out.println(filter.get(i).getLoc());
 		}
 	}
+	*/
 }
