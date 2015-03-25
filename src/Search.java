@@ -60,18 +60,18 @@ public class Search {
 	      sb.append((char) cp);
 	    }
 	    return sb.toString();
-	  }
+	}
 
-	  private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-	    InputStream is = new URL(url).openStream();
-	    try {
-	      InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
-	      BufferedReader rd = new BufferedReader(in);
-	      String jsonText = readAll(rd);
-	      JSONObject json = new JSONObject(jsonText);
-	      return json;
-	    } finally {
-	      is.close();
+	private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+		InputStream is = new URL(url).openStream();
+		try {
+			InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
+	        BufferedReader rd = new BufferedReader(in);
+	        String jsonText = readAll(rd);
+	        JSONObject json = new JSONObject(jsonText);
+	        return json;
+		} finally {
+			is.close();
 	    }
 	  }
 	

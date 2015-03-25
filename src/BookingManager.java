@@ -22,19 +22,19 @@ public class BookingManager {
 	}
 	
 	public static boolean checkIfConcertExists(){
-		if (stmt.execute("SELECT")!= null) return true;
+		if (stmt.execute("SELECT concert FROM table_name WHERE ???")!= null) return true;
 		return false;
 	}
 	
 	public static boolean checkSeats(){
-		if (stmt.execute("SELECT") > 0) return true;
+		if (stmt.execute("SELECT concert FROM table_name WHERE seats > 0") != null) return true;
 		return false;
 	}
 
-	public static ArrayList <> bookConcert(){
-		checkIfConcertExists();
-		checkSeats();
-
+	public static ArrayList<Concert> bookConcert(){
+		if (checkIfConcertExists() = true || checkSeats() = true) {
+			bookConcert
+		}
 	}
 	
 	
