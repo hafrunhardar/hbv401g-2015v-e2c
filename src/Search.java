@@ -95,8 +95,13 @@ public class Search {
 		return list;
 	}
 	
-	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date) throws JSONException{
-		apisData = getApisData();
+	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date){
+		try {
+			apisData = getApisData();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ArrayList<Concert> tempList = new ArrayList<Concert>();
 		if(name != "") {
 			for(int i = 0; i < apisData.size(); i++){
@@ -169,7 +174,6 @@ public class Search {
 	}
 	/*
 	public static void main(String[]args) throws JSONException{
-		Search search = new Search();
 		//ArrayList<Concert> concerts = search.getApisData();
 		ArrayList<Concert> filter = getFilteredData("Eddie","20","Harpa","");
 		
