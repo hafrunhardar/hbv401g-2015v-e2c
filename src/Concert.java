@@ -41,4 +41,8 @@ public class Concert {
 	public void setDate(String date){
 		this.date = date;
 	}
+	
+	public void setAvailableSeats(int seats){
+		this.seats = seats;
+	}
 }

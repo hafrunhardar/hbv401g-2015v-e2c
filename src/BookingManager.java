@@ -46,17 +46,25 @@ public class BookingManager {
 		return numberOfSeats;
 	}
 
-	public String bookConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
+	public Concert bookConcert(Concert concert/*, String inputName, String inputTime, String inputLoc, String inputDate*/) throws SQLException{
+		String inputName = concert.getName(); 
+		String inputTime = concert.getTime(); 
+		String inputLoc  = concert.getLoc(); 
+		String inputDate = concert.getLoc();
+		
 		if (!checkIfConcertExists(inputName, inputTime, inputDate)) {
 			addConcert(inputName, inputTime, inputLoc, inputDate);
 		}
 		if (checkSeats() > 0) {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
+			concert.setAvailableSeats(numberOfSeats);
 			stmt = conn.createStatement(); 
 			stmt.executeUpdate("UPDATE Concerts SET seats="+numberOfSeats+" WHERE name='"+inputName+"' AND time='"+inputTime+"';");
-			return "Purchase confirmed :)";
+			
+			return concert;
 		}
-		return "No seats available :(";
+		//þarf að breyta. 
+		return concert;
 	}	
 }
