@@ -171,14 +171,14 @@ public class Search {
 		}
 		return tempList;
 	}
-	/*
+	
 	public static void main(String[]args) throws JSONException{
 		//ArrayList<Concert> concerts = search.getApisData();
-		ArrayList<Concert> filter = getFilteredData("Eddie","20","Harpa","");
+		/*ArrayList<Concert> filter = getFilteredData("Eddie","20","Harpa","");
 		
 		for(int i = 0; i < filter.size(); i++){
 			System.out.println(filter.get(i).getLoc());
-		}
+		}*/
 	}
-	*/
+	
 }

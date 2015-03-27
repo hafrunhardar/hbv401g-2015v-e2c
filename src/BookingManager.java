@@ -7,7 +7,13 @@ public class BookingManager {
 	// BookingManager creates the database - may only be called once!
 	public BookingManager() {
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/?user=root&password=rootpassword");
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			conn = DriverManager.getConnection("jdbc:sqlite:Booking.db");
 			stmt = null;
 			createDatabase();
 		} catch (SQLException e) {
@@ -18,8 +24,7 @@ public class BookingManager {
 	
 	private void createDatabase() throws SQLException{
 		stmt = conn.createStatement(); 
-		stmt.executeUpdate("CREATE DATABASE Booking");
-		stmt.executeUpdate("CREATE TABLE Concerts(name varchar(30), time varchar(8), loc varchar(50), date varchar(10) seats int );");
+		stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Concerts(name varchar(100), time varchar(8), loc varchar(50), date varchar(10), seats int);");
 	}
 	
 	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
