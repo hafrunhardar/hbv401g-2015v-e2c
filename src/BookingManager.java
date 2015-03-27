@@ -28,13 +28,13 @@ public class BookingManager {
 	}
 	
 	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
-		stmt = conn.createStatement(); 
-		stmt.executeUpdate("INSERT INTO Concerts VALUES ("+inputName+","+inputTime+","+inputLoc+","+inputDate+",100);");		
+		stmt = conn.createStatement(); 	
+		stmt.executeUpdate("INSERT INTO Concerts VALUES('"+inputName+"','"+inputTime+"','"+inputLoc+"','"+inputDate+"',100);");
 	}
 	
 	private boolean checkIfConcertExists(String inputName, String inputTime, String inputDate) throws SQLException{
 		stmt = conn.createStatement(); 
-		ResultSet rs = stmt.executeQuery("SELECT name, time, date FROM Concerts WHERE name="+inputName+" AND time="+inputTime+" AND date="+inputDate+"");
+		ResultSet rs = stmt.executeQuery("SELECT name, time, date FROM Concerts WHERE name='"+inputName+"' AND time='"+inputTime+"' AND date='"+inputDate+"';");
 		if (rs.getRow() != 0) return true;
 		return false;
 	}
@@ -42,7 +42,7 @@ public class BookingManager {
 	private int checkSeats() throws SQLException{
 		stmt = conn.createStatement(); 
 		ResultSet rs = stmt.executeQuery("SELECT seats AS count FROM Concerts");
-		int numberOfSeats = rs.getInt("seats");
+		int numberOfSeats = rs.getInt("count");
 		return numberOfSeats;
 	}
 
@@ -54,7 +54,7 @@ public class BookingManager {
 			int numberOfSeats = checkSeats();
 			numberOfSeats--;
 			stmt = conn.createStatement(); 
-			stmt.executeUpdate("UPDATE Concerts SET (seats = "+numberOfSeats+") WHERE name="+inputName+" AND time="+inputTime+";");
+			stmt.executeUpdate("UPDATE Concerts SET seats="+numberOfSeats+" WHERE name='"+inputName+"' AND time='"+inputTime+"';");
 			return "Purchase confirmed :)";
 		}
 		return "No seats available :(";
