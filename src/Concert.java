@@ -1,7 +1,7 @@
 
 public class Concert {
 	private String name, time, loc, date;
-	private int seats;
+	private int seats = 100;
 	
 // Getters
 	public String getName(){

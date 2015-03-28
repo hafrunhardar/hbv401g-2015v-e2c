@@ -1,6 +1,7 @@
 import java.sql.*;
 
 public class BookingManager {
+	private static final BookingManager INSTANCE = new BookingManager();
 	private Statement stmt;
 	private Connection conn; 
 	
@@ -27,44 +28,54 @@ public class BookingManager {
 		stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Concerts(name varchar(100), time varchar(8), loc varchar(50), date varchar(10), seats int);");
 	}
 	
-	private void addConcert(String inputName, String inputTime, String inputLoc, String inputDate) throws SQLException{
-		stmt = conn.createStatement(); 	
-		stmt.executeUpdate("INSERT INTO Concerts VALUES('"+inputName+"','"+inputTime+"','"+inputLoc+"','"+inputDate+"',100);");
+	private void destroyTable() throws SQLException{
+		stmt = conn.createStatement(); 
+		stmt.executeUpdate("DROP TABLE Concerts");
 	}
 	
-	private boolean checkIfConcertExists(String inputName, String inputTime, String inputDate) throws SQLException{
+	private void addConcert(Concert concert) throws SQLException{
+		stmt = conn.createStatement(); 	
+		stmt.executeUpdate("INSERT INTO Concerts VALUES('"+concert.getName()+"','"+concert.getTime()+"','"+concert.getLoc()+"','"+concert.getDate()+"',100);");
+	}
+	
+	private boolean checkIfConcertExists(Concert concert) throws SQLException{
 		stmt = conn.createStatement(); 
-		ResultSet rs = stmt.executeQuery("SELECT name, time, date FROM Concerts WHERE name='"+inputName+"' AND time='"+inputTime+"' AND date='"+inputDate+"';");
-		if (rs.getRow() != 0) return true;
+		int count = 0;
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Concerts WHERE name='"+concert.getName()+"' AND time='"+concert.getTime()+"' AND date='"+concert.getDate()+"';");
+		while(rs.next()){
+			System.out.println(rs.getString("name")+" nafn");
+			count++;
+		}
+		if(count>0) return true;
 		return false;
 	}
-	
-	private int checkSeats() throws SQLException{
-		stmt = conn.createStatement(); 
-		ResultSet rs = stmt.executeQuery("SELECT seats AS count FROM Concerts");
-		int numberOfSeats = rs.getInt("count");
-		return numberOfSeats;
-	}
 
-	public Concert bookConcert(Concert concert/*, String inputName, String inputTime, String inputLoc, String inputDate*/) throws SQLException{
-		String inputName = concert.getName(); 
-		String inputTime = concert.getTime(); 
-		String inputLoc  = concert.getLoc(); 
-		String inputDate = concert.getLoc();
-		
-		if (!checkIfConcertExists(inputName, inputTime, inputDate)) {
-			addConcert(inputName, inputTime, inputLoc, inputDate);
+	public Concert bookConcert(Concert concert) throws SQLException{
+		if (!checkIfConcertExists(concert)) {
+			System.out.println("ég er ekki til..");
+			addConcert(concert);
 		}
-		if (checkSeats() > 0) {
-			int numberOfSeats = checkSeats();
+		
+		int numberOfSeats = -1;
+		ResultSet rs = stmt.executeQuery("SELECT seats FROM Concerts WHERE name='"+concert.getName()+"' AND time='"+concert.getTime()+"' AND date='"+concert.getDate()+"';");
+		while(rs.next()){
+			numberOfSeats = rs.getInt("seats");
+		}
+		
+		if (numberOfSeats > 0) {
+	
 			numberOfSeats--;
 			concert.setAvailableSeats(numberOfSeats);
 			stmt = conn.createStatement(); 
-			stmt.executeUpdate("UPDATE Concerts SET seats="+numberOfSeats+" WHERE name='"+inputName+"' AND time='"+inputTime+"';");
+			stmt.executeUpdate("UPDATE Concerts SET seats="+numberOfSeats+" WHERE name='"+concert.getName()+"' AND time='"+concert.getTime()+"';");
 			
 			return concert;
 		}
 		//þarf að breyta. 
 		return concert;
+	}
+
+	public static BookingManager getInstance() {
+		return INSTANCE;
 	}	
 }
