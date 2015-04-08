@@ -6,7 +6,7 @@ public class BookingManager {
 	private Connection conn; 
 	
 	// BookingManager creates the database - may only be called once!
-	public BookingManager() {
+	private BookingManager() {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e1) {
@@ -28,10 +28,10 @@ public class BookingManager {
 		stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Concerts(name varchar(100), time varchar(8), loc varchar(50), date varchar(10), seats int);");
 	}
 	
-	private void destroyTable() throws SQLException{
+	/*private void destroyTable() throws SQLException{
 		stmt = conn.createStatement(); 
 		stmt.executeUpdate("DROP TABLE Concerts");
-	}
+	}*/
 	
 	private void addConcert(Concert concert) throws SQLException{
 		stmt = conn.createStatement(); 	
@@ -43,14 +43,14 @@ public class BookingManager {
 		int count = 0;
 		ResultSet rs = stmt.executeQuery("SELECT * FROM Concerts WHERE name='"+concert.getName()+"' AND time='"+concert.getTime()+"' AND date='"+concert.getDate()+"';");
 		while(rs.next()){
-			System.out.println(rs.getString("name")+" nafn");
+			System.out.println(rs.getString("name")+" - ég er til");
 			count++;
 		}
 		if(count>0) return true;
 		return false;
 	}
 
-	public Concert bookConcert(Concert concert) throws SQLException{
+	public Boolean bookConcert(Concert concert) throws SQLException{
 		if (!checkIfConcertExists(concert)) {
 			System.out.println("ég er ekki til..");
 			addConcert(concert);
@@ -68,11 +68,9 @@ public class BookingManager {
 			concert.setAvailableSeats(numberOfSeats);
 			stmt = conn.createStatement(); 
 			stmt.executeUpdate("UPDATE Concerts SET seats="+numberOfSeats+" WHERE name='"+concert.getName()+"' AND time='"+concert.getTime()+"';");
-			
-			return concert;
+			return true;
 		}
-		//þarf að breyta. 
-		return concert;
+		 return false;
 	}
 
 	public static BookingManager getInstance() {
