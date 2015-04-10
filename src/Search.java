@@ -78,6 +78,7 @@ public class Search {
 		ArrayList<Concert> list = new ArrayList<Concert>();
 		for(int i = 0; i < data.size(); i++ ){
 			Concert temp = data.get(i);
+			String getPriceString = String.valueOf(temp.getPrice());
 			if(inputType == "name" && temp.getName().contains(inputData)){
 				list.add(temp);
 			}
@@ -90,16 +91,21 @@ public class Search {
 			if(inputType == "date" && temp.getDate().contains(inputData)){
 				list.add(temp);
 			}
+			if(inputType == "price" && getPriceString.contains(inputData)){
+				list.add(temp);
+			}
 		}
 		return list;
 	}
 	
-	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date){
+	
+	//how to do error handling
+	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date, int price){
 		try {
 			apisData = getApisData();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return apisData;
 		}
 		ArrayList<Concert> tempList = new ArrayList<Concert>();
 		if(name != "") {
@@ -145,6 +151,7 @@ public class Search {
 					Concert temp = tempList.get(i);
 					if(temp.getLoc().contains(loc)){
 						tempList = filter(tempList, "loc", loc);
+						break;
 					}
 				}
 			}
@@ -169,16 +176,29 @@ public class Search {
 				}
 			}
 		}
+		
+		if(price != 0) {
+			String priceString = String.valueOf(price);
+			if(tempList.size() == 0){
+				for(int i = 0; i < apisData.size(); i++){
+					Concert temp = apisData.get(i);
+					String getPriceString = String.valueOf(temp.getPrice());
+					if(getPriceString.contains(priceString)){
+						tempList = filter(apisData, "price", priceString);
+						break;
+					}
+				}
+			}else{
+				for(int i = 0; i < tempList.size(); i++){
+					Concert temp = tempList.get(i);
+					String getPriceString = String.valueOf(temp.getPrice());
+					if(getPriceString.contains(priceString)){
+						tempList = filter(tempList, "price", priceString);
+						break;
+					}
+				}
+			}
+		}
 		return tempList;
 	}
-	
-	public static void main(String[]args) throws JSONException{
-		//ArrayList<Concert> concerts = search.getApisData();
-		/*ArrayList<Concert> filter = getFilteredData("Eddie","20","Harpa","");
-		
-		for(int i = 0; i < filter.size(); i++){
-			System.out.println(filter.get(i).getLoc());
-		}*/
-	}
-	
 }

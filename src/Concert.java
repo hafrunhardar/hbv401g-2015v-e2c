@@ -1,7 +1,7 @@
 
 public class Concert {
 	private String name, time, loc, date;
-	private int seats = 100;
+	private int seats = 100, price = 5000;
 	
 // Getters
 	public String getName(){
@@ -22,6 +22,10 @@ public class Concert {
 	
 	public int getAvailableSeats(){
 		return seats;
+	}
+	
+	public int getPrice(){
+		return price;
 	}
 
 	
@@ -45,4 +49,5 @@ public class Concert {
 	public void setAvailableSeats(int seats){
 		this.seats = seats;
 	}
+
 }
