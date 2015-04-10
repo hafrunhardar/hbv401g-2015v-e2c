@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Search {
+public class ApisManager {
 	private static ArrayList<Concert> apisData = new ArrayList<Concert>();
 	private static JSONObject obj;
 	
