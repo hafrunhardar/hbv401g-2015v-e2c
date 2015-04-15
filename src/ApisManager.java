@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -18,23 +19,15 @@ public class ApisManager {
 	
 
 	public static ArrayList<Concert> getApisData() throws DataNotFoundException{
-		//Lesa inn json hlut frá apis.is
-		try {
-			obj = readJsonFromUrl("http://apis.is/concerts");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new DataNotFoundException("Could not read data from Apis.is");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new DataNotFoundException("Could not read data from Apis.is");
-		}
-		/*Búið að lesa inn json hlutinn*/
+		obj = readJsonFromUrl("http://apis.is/concerts");
 		
 		JSONArray results;
+		if(obj == null){
+			return apisData;
+		}
 		try {
-			results = obj.getJSONArray("results");for (int i=0; i<results.length(); i++) {
+			results = obj.getJSONArray("results");
+			for (int i=0; i<results.length(); i++) {
 			    JSONObject item = results.getJSONObject(i);
 			    String name = item.getString("eventDateName");
 			    String timeDate = item.getString("dateOfShow");
@@ -69,17 +62,32 @@ public class ApisManager {
 	    return sb.toString();
 	}
 
-	private static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-		InputStream is = new URL(url).openStream();
+	private static JSONObject readJsonFromUrl(String url) throws DataNotFoundException {
+		InputStream is;
+		JSONObject json;
 		try {
-			InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
-	        BufferedReader rd = new BufferedReader(in);
-	        String jsonText = readAll(rd);
-	        JSONObject json = new JSONObject(jsonText);
-	        return json;
-		} finally {
-			is.close();
-	    }
+			is = new URL(url).openStream();
+			try {
+				InputStreamReader in = new InputStreamReader(is, Charset.forName("UTF-8"));
+		        BufferedReader rd = new BufferedReader(in);
+		        String jsonText = readAll(rd);
+		        json = new JSONObject(jsonText);
+		        return json;
+			} finally {
+				is.close();
+		    }
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		json = null;
+		return json;
 	  }
 	
 	private static ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){

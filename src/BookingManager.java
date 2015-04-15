@@ -1,10 +1,12 @@
 import java.sql.*;
 
 public class BookingManager {
-	private final BookingManager INSTANCE = new BookingManager();
+	private static BookingManager INSTANCE = createBookingManager();
 	private Statement stmt;
 	private Connection conn; 
 	
+	
+		
 	// BookingManager creates the database - may only be called once!
 	private BookingManager() throws DataNotFoundException {
 		try {
@@ -26,6 +28,15 @@ public class BookingManager {
 		}
 	}
 	
+	private static BookingManager createBookingManager() {
+		try{
+			INSTANCE = new BookingManager();
+		} catch (final DataNotFoundException e){
+			
+		}
+		return INSTANCE;
+	}
+
 	private void createDatabase() throws DataNotFoundException{
 		try {
 			stmt = conn.createStatement();
@@ -117,7 +128,7 @@ public class BookingManager {
 		 return false;
 	}
 
-	public BookingManager getInstance() {
+	public static BookingManager getInstance() {
 		return INSTANCE;
 	}	
 }
