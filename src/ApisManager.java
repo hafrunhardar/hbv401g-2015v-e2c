@@ -17,36 +17,44 @@ public class ApisManager {
 	private static JSONObject obj;
 	
 
-	public static ArrayList<Concert> getApisData() throws JSONException{
+	public static ArrayList<Concert> getApisData() throws DataNotFoundException{
 		//Lesa inn json hlut frá apis.is
 		try {
 			obj = readJsonFromUrl("http://apis.is/concerts");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DataNotFoundException("Could not read data from Apis.is");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DataNotFoundException("Could not read data from Apis.is");
 		}
 		/*Búið að lesa inn json hlutinn*/
 		
-		JSONArray results = obj.getJSONArray("results");
-		for (int i=0; i<results.length(); i++) {
-		    JSONObject item = results.getJSONObject(i);
-		    String name = item.getString("eventDateName");
-		    String timeDate = item.getString("dateOfShow");
-		    String loc2 = item.getString("eventHallName");
-		    String loc1 = item.getString("userGroupName");
-		    
-		    String[] splitTimeDate = timeDate.split("T");
-		    Concert concert = new Concert();
-		    
-		    concert.setName(name);
-		    concert.setDate(splitTimeDate[0]);
-		    concert.setTime(splitTimeDate[1]);
-		    concert.setLoc(loc1+", "+loc2);
-		    
-		    apisData.add(concert);
+		JSONArray results;
+		try {
+			results = obj.getJSONArray("results");for (int i=0; i<results.length(); i++) {
+			    JSONObject item = results.getJSONObject(i);
+			    String name = item.getString("eventDateName");
+			    String timeDate = item.getString("dateOfShow");
+			    String loc2 = item.getString("eventHallName");
+			    String loc1 = item.getString("userGroupName");
+			    
+			    String[] splitTimeDate = timeDate.split("T");
+			    Concert concert = new Concert();
+			    
+			    concert.setName(name);
+			    concert.setDate(splitTimeDate[0]);
+			    concert.setTime(splitTimeDate[1]);
+			    concert.setLoc(loc1+", "+loc2);
+			    
+			    apisData.add(concert);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DataNotFoundException("Could not genarate ArrayList of Concerts from JSON file");
 		}
 		
 		return apisData;
@@ -100,13 +108,8 @@ public class ApisManager {
 	
 	
 	//how to do error handling
-	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date, int price){
-		try {
-			apisData = getApisData();
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return apisData;
-		}
+	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date, int price) throws DataNotFoundException{
+		apisData = getApisData();
 		ArrayList<Concert> tempList = new ArrayList<Concert>();
 		if(name != "") {
 			for(int i = 0; i < apisData.size(); i++){
