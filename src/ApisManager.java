@@ -17,9 +17,10 @@ public class ApisManager {
 	private static ArrayList<Concert> apisData = new ArrayList<Concert>();
 	private static JSONObject obj;
 	
-
+	//Gets data from apis and returns them in a ArrayList of concerts.
 	public static ArrayList<Concert> getApisData() throws DataNotFoundException{
 		obj = readJsonFromUrl("http://apis.is/concerts");
+		apisData = new ArrayList<Concert>();
 		
 		JSONArray results;
 		if(obj == null){
@@ -45,7 +46,6 @@ public class ApisManager {
 			    apisData.add(concert);
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new DataNotFoundException("Could not genarate ArrayList of Concerts from JSON file");
 		}
@@ -53,6 +53,7 @@ public class ApisManager {
 		return apisData;
 	}
 	
+	//Returns a string. 
 	private static String readAll(Reader rd) throws IOException {
 	    StringBuilder sb = new StringBuilder();
 	    int cp;
@@ -62,9 +63,10 @@ public class ApisManager {
 	    return sb.toString();
 	}
 
+	//Reads JSON string from url and returns as a JSONObject.
 	private static JSONObject readJsonFromUrl(String url) throws DataNotFoundException {
 		InputStream is;
-		JSONObject json;
+		JSONObject json = null;
 		try {
 			is = new URL(url).openStream();
 			try {
@@ -77,19 +79,22 @@ public class ApisManager {
 				is.close();
 		    }
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DataNotFoundException("I/O Error");
+			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DataNotFoundException("JSON Error");
+			
 		}
-		json = null;
 		return json;
 	  }
 	
+	
+	// Filters out of ArrayList data by the value of inputData.
 	private static ArrayList<Concert> filter(ArrayList<Concert> data, String inputType, String inputData){
 		ArrayList<Concert> list = new ArrayList<Concert>();
 		for(int i = 0; i < data.size(); i++ ){
@@ -115,7 +120,7 @@ public class ApisManager {
 	}
 	
 	
-	//how to do error handling
+	// Filters out by given inputs, name, time, location, date or price.
 	public static ArrayList<Concert> getFilteredData(String name, String time, String loc, String date, int price) throws DataNotFoundException{
 		apisData = getApisData();
 		ArrayList<Concert> tempList = new ArrayList<Concert>();

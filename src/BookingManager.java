@@ -4,8 +4,6 @@ public class BookingManager {
 	private static BookingManager INSTANCE = createBookingManager();
 	private Statement stmt;
 	private Connection conn; 
-	
-	
 		
 	// BookingManager creates the database - may only be called once!
 	private BookingManager() throws DataNotFoundException {
@@ -28,6 +26,7 @@ public class BookingManager {
 		}
 	}
 	
+	// Creates a new bookingManager
 	private static BookingManager createBookingManager() {
 		try{
 			INSTANCE = new BookingManager();
@@ -37,6 +36,7 @@ public class BookingManager {
 		return INSTANCE;
 	}
 
+	//Creates a new database if it doesn't already exist.
 	private void createDatabase() throws DataNotFoundException{
 		try {
 			stmt = conn.createStatement();
@@ -54,11 +54,7 @@ public class BookingManager {
 		}
 	}
 	
-	/*private void destroyTable() throws SQLException{
-		stmt = conn.createStatement(); 
-		stmt.executeUpdate("DROP TABLE Concerts");
-	}*/
-	
+	// Adds a new concert to the Concerts table
 	private void addConcert(Concert concert) throws DataNotFoundException{
 		try {
 			stmt = conn.createStatement();
@@ -76,6 +72,7 @@ public class BookingManager {
 		}
 	}
 	
+	// Checks whether the Concert concert exists in the database or not, if not: it adds it.
 	private boolean checkIfConcertExists(Concert concert) throws DataNotFoundException{
 		try {
 			stmt = conn.createStatement();
@@ -100,7 +97,9 @@ public class BookingManager {
 		if(count>0) return true;
 		return false;
 	}
-
+	
+	// Books the Concert concert, reduces the number of seats if they are available.
+	// returns true if the booking succeeds.
 	public Boolean bookConcert(Concert concert) throws DataNotFoundException{
 		if (!checkIfConcertExists(concert)) {
 			System.out.println("ég er ekki til..");
@@ -128,6 +127,7 @@ public class BookingManager {
 		 return false;
 	}
 
+	// The only way to get an instance of the BookingManager.
 	public static BookingManager getInstance() {
 		return INSTANCE;
 	}	
